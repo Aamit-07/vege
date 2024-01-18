@@ -1,0 +1,105 @@
+{% extends "base.html" %}
+{% block start %}
+
+
+<div class="container mt-5 ">
+    
+    <form class="col-6 mx-auto card p-3 shadow-lg" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <h2>Add Receipe</h2>
+        <hr>
+        <div class="mb-3">
+          <label for="exampleInputEmail1" class="form-label">Receipe Name</label>
+          <input name="receipe_name" required type="text" class="form-control">
+        </div>
+        <div class="mb-3">
+          <label for="exampleInputPassword1" class="form-label">Receipe Description</label>
+          <textarea name="receipe_description" class="form-control" req id="" cols="30" rows="10"></textarea>
+        </div>
+        <div class="mb-3">
+            <label for="exampleInputPassword1" class="form-label">Receipe Image</label>
+            <input name="receipe_image" type="file" class="form-control">
+        </div>
+        <button type="submit" class="btn btn-success">Add Receipe</button>
+    </form>
+
+    <hr>
+    <div class="mt -5">
+        <div class="mx-auto col-6">
+            <form>
+            <div class="mb-3">
+                <label for="exampleInputEmail1" class="form-label">Search Receipe</label>
+                <input name="search" type="text" class="form-control">
+              </div>
+              <button type="submit" class="btn btn-primary">Search</button>
+            </form>
+        </div>
+    </div>
+
+
+    <table class="table mt-5">
+        <thead>
+          <tr>
+            <th scope="col">S.no</th>
+            <th scope="col">receipe_name</th>
+            <th scope="col">receipe_description</th>
+            <th scope="col">Image</th>
+            <th scope="col">Actions</th>
+
+          </tr>
+        </thead>
+        <tbody>
+            {% for receipe in receipe %}
+          <tr>
+            <th>{{forloop.counter}}</th>
+            <td>{{receipe.receipe_name}}</td>
+            <td>{{receipe.receipe_description}}</td>
+            <td>
+                <img src = "/media/{{receipe.receipe_image}}" style = "height: 100px;" >
+            </td>
+            <td>
+                <a href="/delete-receipe/{{receipe.id}}" class="btn btn-danger m-2" >Delete</a>
+                <a href="/update-receipe/{{receipe.id}}" class="btn btn-success m-2">Update</a>
+            </td>
+            
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+      <nav aria-label="Page navigation example">
+        <ul class="pagination">
+          {% if receipe.has_previous %}
+          <li class="page-item ">
+            <a class="page-link" href="/receipe/?page=1">First</a>
+          </li>
+          <li class="page-item">
+            <a class="page-link" href="/receipe/?page={{receipe.previous_page_number}}" aria-label="Previous">
+              <span aria-hidden="true">&laquo;</span>
+            </a>
+          </li>
+          {% endif %}
+
+          {% for n in totalpagenumber %}
+          <li class="page-item"><a class="page-link" href="/receipe/?page={{n}}">{{n}}</a></li>
+          {% endfor %}
+          <!-- <li class="page-item"><a class="page-link" href="/receipe/?page=2">2</a></li>
+          <li class="page-item"><a class="page-link" href="/receipe/?page=3">3</a></li> -->
+          {% if receipe.has_next %}
+          <li class="page-item">
+            <a class="page-link" href="/receipe/?page={{receipe.next_page_number}}" aria-label="Next">
+              <span aria-hidden="true">&raquo;</span>
+            </a>
+          </li>
+          {% endif %}
+          <li class="page-item ">
+            <a class="page-link" href="/receipe/?page={{lastpage}}">last</a>
+          </li>
+          
+        </ul>
+      </nav>
+
+
+</div>
+    
+{% endblock %}
+
